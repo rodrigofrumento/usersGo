@@ -7,7 +7,9 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/rodrigofrumento/usersGo/internal/database/sqlc"
 	"github.com/rodrigofrumento/usersGo/internal/entity"
+	"github.com/rodrigofrumento/usersGo/internal/repository/transaction"
 )
 
 func (r *repository) CreateUser(ctx context.Context, u *entity.UserEntity) error {

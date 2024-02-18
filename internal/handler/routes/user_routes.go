@@ -2,12 +2,37 @@ package routes
 
 import (
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/jwtauth"
+	"github.com/rodrigofrumento/usersGo/config/env"
 	"github.com/rodrigofrumento/usersGo/internal/handler"
+	"github.com/rodrigofrumento/usersGo/internal/handler/middleware"
 )
 
-func InitUserRoutes(router chi.Router, h handler.Handler) {
-	router.Route("/user", func(r chi.Router) {
-		r.Post("/", h.CreateUser)
-		r.Patch("/{id}", h.UpdateUser)
+func InitRoutes(router chi.Router, h handler.Handler) {
+	router.Use(middleware.LoggerData)
+
+	router.Post("/user", h.CreateUser)
+	router.Route("/", func(r chi.Router) {
+		r.Use(jwtauth.Verifier(env.Env.TokenAuth))
+		r.Use(jwtauth.Authenticator)
+
+		//user routes
+		r.Patch("/user", h.UpdateUser)
+		r.Get("/user", h.GetUserByID)
+		r.Delete("/user", h.DeleteUser)
+		r.Get("/user/list-all", h.FindManyUsers)
+		r.Patch("/user/password", h.UpdateUserPassword)
+
+		// categories routes
+		r.Post("/category", h.CreateCategory)
+
+		// products routes
+		r.Post("/product", h.CreateProduct)
+		r.Patch("/product/{id}", h.UpdateProduct)
+		r.Delete("/product/{id}", h.DeleteProduct)
+		r.Get("/product", h.FindManyProducts)
+	})
+	router.Route("/auth", func(r chi.Router) {
+		r.Post("/login", h.Login)
 	})
 }

@@ -8,7 +8,9 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/rodrigofrumento/usersGo/external/viacep"
 	"github.com/rodrigofrumento/usersGo/internal/dto"
+	"github.com/rodrigofrumento/usersGo/internal/entity"
 	"github.com/rodrigofrumento/usersGo/internal/handler/response"
 	"golang.org/x/crypto/bcrypt"
 )
