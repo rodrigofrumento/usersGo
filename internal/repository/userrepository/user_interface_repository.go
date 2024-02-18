@@ -1,9 +1,11 @@
 package userrepository
 
 import (
+	"context"
 	"database/sql"
 
 	"github.com/rodrigofrumento/usersGo/internal/database/sqlc"
+	"github.com/rodrigofrumento/usersGo/internal/entity"
 )
 
 func NewUserRepository(db *sql.DB, q *sqlc.Queries) UserRepository {
@@ -19,9 +21,12 @@ type repository struct {
 }
 
 type UserRepository interface {
-	CreateUser() error
-}
-
-func (r *repository) CreateUser() error {
-	return nil
+	CreateUser(ctx context.Context, u *entity.UserEntity) error
+	FindUserByEmail(ctx context.Context, email string) (*entity.UserEntity, error)
+	FindUserByID(ctx context.Context, id string) (*entity.UserEntity, error)
+	UpdateUser(ctx context.Context, u *entity.UserEntity) error
+	DeleteUser(ctx context.Context, id string) error
+	FindManyUsers(ctx context.Context) ([]entity.UserEntity, error)
+	UpdatePassword(ctx context.Context, pass, id string) error
+	GetUserPassword(ctx context.Context, id string) (string, error)
 }

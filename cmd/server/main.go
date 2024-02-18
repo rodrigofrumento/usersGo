@@ -40,7 +40,9 @@ func main() {
 	newUserHandler := userhandler.NewUserHandler(newUserService)
 
 	//routes
-	routes.InitUserRoutes(router, newUserHandler)
+	router := chi.NewRouter()
+	routes.InitUserRoutes(router, newUserHandler())
+	routes.InitDocsRouter(router)
 
 	port := fmt.Sprintf(":%s", env.Env.GoPort)
 	slog.Info(fmt.Sprintf("server running on port %s", port))
